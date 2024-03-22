@@ -2,13 +2,21 @@ import PostCard from '@/components/postCard/postCard'
 import styles from './blog.module.css'
 
 
-const BlogPage = () => {
+const BlogPage = ({params}) => {
   return (
     <div className={styles.container}>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
+      <div className={styles.post}>
+        <PostCard/>
+      </div>
+      <div className={styles.post}>
+        <PostCard/>
+      </div>
+      <div className={styles.post}>
+        <PostCard/>
+      </div>
+      <div className={styles.post}>
+        <PostCard/>
+      </div>
     </div>
   )
 }
