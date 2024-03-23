@@ -1,20 +1,26 @@
 import Image from "next/image"
 import styles from "./singlePost.module.css"
+import { Suspense } from "react"
+import { getPost } from "@/lib/data"
 
-const getData = async (slug)=> {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`)
+// fetch data with an API
+// const getData = async (slug)=> {
+//   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`)
 
-  if(!res.ok){
-    throw new Error("Something went wrong")
-  }
+//   if(!res.ok){
+//     throw new Error("Something went wrong")
+//   }
 
-  return res.json()
-}
+//   return res.json()
+// }
 
 const SinglePostPage =async ({params}) => {
 
   const {slug} = params
-  const post = await getData(slug)
+  // const post = await getData(slug)
+
+    // fetch data without api
+  const posts = await getPost(slug)
 
   return (
     <div className={styles.container}>
@@ -27,7 +33,7 @@ const SinglePostPage =async ({params}) => {
         />
       </div>
       <div className={styles.textContainer}>
-        <h1 className={styles.title}>{post.title}</h1>
+        <h1 className={styles.title}>{post?.title}</h1>
         <div className={styles.detail}>
           <Image 
             className={styles.avatar}
@@ -36,10 +42,10 @@ const SinglePostPage =async ({params}) => {
             width={50}
             height={50}
           />
-          <div className={styles.detailText}>
-            <span className={styles.detailTitle}>Author</span>
-            <span className={styles.detailValue}>Subh B</span>
-          </div>
+          { post && <Suspense>
+            <postUser userId = {post.userID}/>
+          </Suspense>}
+          
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>published</span>
             <span className={styles.detailValue}>20-03-24</span>
