@@ -24,20 +24,20 @@ const SinglePostPage =async ({params}) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.imgContainer}>
+      {post.img && <div className={styles.imgContainer}>
         <Image
-          src=""
+          src={post.img}
           alt=""
           fill
           className={styles.img}
         />
-      </div>
+      </div>}
       <div className={styles.textContainer}>
-        <h1 className={styles.title}>{post?.title}</h1>
+        <h1 className={styles.title}>{post.title}</h1>
         <div className={styles.detail}>
           <Image 
             className={styles.avatar}
-            src=""
+            src={post.img}
             alt=""
             width={50}
             height={50}
@@ -52,7 +52,7 @@ const SinglePostPage =async ({params}) => {
           </div>
         </div>
         <div className={styles.content}>
-          {post.body}
+          {post.desc}
         </div>
       </div>
     </div>
