@@ -12,9 +12,11 @@
 
 import { Post, User } from "./models";
 import { connectDb } from "./utils";
+import { unstable_noStore as noStore } from "next/cache";
 
 
 export const getPosts = async () => {
+  noStore()
     try {
       connectDb();
       const posts = await Post.find();

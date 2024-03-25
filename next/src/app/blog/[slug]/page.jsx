@@ -3,6 +3,7 @@ import styles from "./singlePost.module.css"
 import { Suspense } from "react"
 import { getPost } from "@/lib/data"
 
+
 // fetch data with an API
 // const getData = async (slug)=> {
 //   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`)
@@ -13,6 +14,17 @@ import { getPost } from "@/lib/data"
 
 //   return res.json()
 // }
+
+export const generateMetadata = async ({ params }) => {
+  const { slug } = params;
+
+  const post = await getPost(slug);
+
+  return {
+    title: post.title,
+    description: post.desc,
+  };
+};
 
 const SinglePostPage =async ({params}) => {
 
