@@ -43,3 +43,8 @@ export const deletePost = async(formData) => {
         return { error: "Something went wrong!" };
     }
 }
+
+export const handleGithubLogin = async () => {
+  "use server";
+  await signIn("github");
+};
