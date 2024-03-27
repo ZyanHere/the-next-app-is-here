@@ -1,8 +1,12 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { signIn, signOut } from "./auth";
 import { Post } from "./models";
 import { connectDb } from "./utils";
 
 export const addPost= async (formData) => {
-    "use server"
+    
 
     const { title, desc, slug, userId } = Object.fromEntries(formData);
 
@@ -47,4 +51,9 @@ export const deletePost = async(formData) => {
 export const handleGithubLogin = async () => {
   "use server";
   await signIn("github");
+};
+
+export const handleLogout = async () => {
+  "use server";
+  await signOut();
 };
