@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "./auth";
-import { Post } from "./models";
+import { Post, User } from "./models";
 import { connectDb } from "./utils";
 
 export const addPost= async (formData) => {
@@ -57,3 +57,33 @@ export const handleLogout = async () => {
   "use server";
   await signOut();
 };
+
+export const register = async (formData) => {
+  const {username, email, password, img, passwordRepeat} = Object.fromEntries(formData)
+
+  if(password !== passwordRepeat) {return "passwords donot match"}
+
+  try {
+    connectDb();
+
+    const user = await User.findOne({username})
+    if(user) {
+      return "username already exist"
+    }
+
+    const newUser = new User({
+      username,
+      email,
+      password,
+      img
+    })
+
+    await newUser.save();
+    console.log("saved to db");
+
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+
+}
