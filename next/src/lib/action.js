@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { connectDb } from "./utils";
+import bcrypt from "bcrypt"
 
 export const addPost= async (formData) => {
     
@@ -61,7 +62,7 @@ export const handleLogout = async () => {
 export const register = async (formData) => {
   const {username, email, password, img, passwordRepeat} = Object.fromEntries(formData)
 
-  if(password !== passwordRepeat) {return "passwords donot match"}
+  if(password !== passwordRepeat) {return "passwords do not match"}
 
   try {
     connectDb();
@@ -71,15 +72,31 @@ export const register = async (formData) => {
       return "username already exist"
     }
 
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const newUser = new User({
       username,
       email,
-      password,
+      password: hashedPassword,
       img
     })
 
     await newUser.save();
     console.log("saved to db");
+
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
+  }
+
+}
+
+export const login = async (formData) => {
+  const {username,  password} = Object.fromEntries(formData)
+
+  try {
+    await signIn("credentials", { username, password })
 
   } catch (err) {
     console.log(err);
