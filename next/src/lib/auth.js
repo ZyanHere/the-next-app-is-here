@@ -3,12 +3,12 @@ import GitHub from "next-auth/providers/github";
 import { connectDb } from "./utils";
 import { User } from "./models";
 import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config";
 
 const login = async (credentials) => {
   try {
-    connectToDb();
+    connectDb();
     const user = await User.findOne({ username: credentials.username });
 
     if (!user) throw new Error("Wrong credentials!");
@@ -51,7 +51,7 @@ export const {
   ],
     callbacks: {
       async signIn({ user, account, profile }) {
-        console.log(user, account, profile)
+        // console.log(user, account, profile)
 
         if (account.provider === "github") {
           connectDb();

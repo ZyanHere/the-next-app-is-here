@@ -1,6 +1,6 @@
 import PostCard from '@/components/postCard/postCard'
 import styles from './blog.module.css'
-import { getPosts } from '@/lib/data'
+// import { getPosts } from '@/lib/data'
 
 //  fetch data with an API
 // const getData = async ()=> {
@@ -40,8 +40,6 @@ const BlogPage = async () => {
           <PostCard post={post}/>
         </div>
       ))}
-      
-      
     </div>
   )
 }

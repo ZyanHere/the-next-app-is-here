@@ -5,7 +5,7 @@ const connection = {};
 export const connectDb = async () => {
     try {
         if(connection.isConnected){
-            console.log("Using exsiting connection")
+            console.log("Using existing connection")
             return;
         }
         const db = await mongoose.connect(process.env.MONGO)

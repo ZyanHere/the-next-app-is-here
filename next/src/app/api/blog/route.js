@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export const GET = async (request) => {
     try {
         connectDb()
-        const post = await Post.find()
+        const posts = await Post.find()
         return NextResponse.json(posts)
 
     } catch (error) {

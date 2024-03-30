@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "./auth";
 import { Post, User } from "./models";
 import { connectDb } from "./utils";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 export const addPost= async (formData) => {
     
@@ -24,13 +24,14 @@ export const addPost= async (formData) => {
         console.log("saved to db");
 
         revalidatePath("/blog");
+        revalidatePath("/admin");
 
       } catch (err) {
         console.log(err);
         return { error: "Something went wrong!" };
       }
 
-    console.log(title, desc, slug, userId)
+    // console.log(title, desc, slug, userId)
 }
 
 export const deletePost = async(formData) => {
@@ -42,6 +43,7 @@ export const deletePost = async(formData) => {
         console.log("deleted from db")
 
         revalidatePath("/blog")
+        revalidatePath("/admin");
         
     } catch (error) {
         console.log(err);
@@ -59,8 +61,8 @@ export const handleLogout = async () => {
   await signOut();
 };
 
-export const register = async (formData) => {
-  const {username, email, password, img, passwordRepeat} = Object.fromEntries(previousState, formData)
+export const register = async (previousState, formData) => {
+  const {username, email, password, img, passwordRepeat} = Object.fromEntries(formData)
 
   if(password !== passwordRepeat) {return "passwords do not match"}
 
@@ -69,7 +71,7 @@ export const register = async (formData) => {
 
     const user = await User.findOne({username})
     if(user) {
-      return "username already exist"
+      return { error: "Username already exists" };
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -115,7 +117,7 @@ export const addUser = async (prevState,formData) => {
   const { username, email, password, img } = Object.fromEntries(formData);
 
   try {
-    connectToDb();
+    connectDb();
     const newUser = new User({
       username,
       email,
@@ -136,7 +138,7 @@ export const deleteUser = async (formData) => {
   const { id } = Object.fromEntries(formData);
 
   try {
-    connectToDb();
+    connectDb();
 
     await Post.deleteMany({ userId: id });
     await User.findByIdAndDelete(id);
